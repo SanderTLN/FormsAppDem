@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.VisualBasic;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -19,11 +20,14 @@ namespace FormsAppDem
         CheckBox box_lbl, box_btn;
         RadioButton r1, r2;
         TextBox txt_box;
+        PictureBox picture;
+        TabControl tabControl;
+        TabPage page1, page2, page3;
         public Form1()
         {
-            this.Height = 500;
-            this.Width = 600;
-            this.Text = "Vorm elementidega";
+            Height = 500;
+            Width = 600;
+            Text = "Vorm elementidega";
             tree = new TreeView();
             tree.Dock = DockStyle.Left;
             tree.AfterSelect += Tree_AfterSelect;
@@ -39,35 +43,38 @@ namespace FormsAppDem
             tn.Nodes.Add(new TreeNode("Silt-Label"));
             lbl = new Label();
             lbl.Text = "Dadova";
-            lbl.Size = new Size(45, 15);
-            lbl.Location = new Point(148, 60);
+            lbl.Size = new Size(500, 15);
+            lbl.Location = new Point(148, 70);
             tn.Nodes.Add(new TreeNode("Märkeruut-CheckBox"));
             tn.Nodes.Add(new TreeNode("Radionupp-Radiobutton"));
             tn.Nodes.Add(new TreeNode("Tekstkast-TextBox"));
+            tn.Nodes.Add(new TreeNode("Pildikast-PictureBox"));
+            tn.Nodes.Add(new TreeNode("Kaart-TabControl"));
+            tn.Nodes.Add(new TreeNode("Sõnumkast-MessageBox"));
             tree.Nodes.Add(tn);
-            this.Controls.Add(tree);
+            Controls.Add(tree);
         }
 
         private void Tree_AfterSelect(object sender, TreeViewEventArgs e)
         {
             if (e.Node.Text == "Nupp-Button")
             {
-                this.Controls.Add(btn);
+                Controls.Add(btn);
             }
             else if (e.Node.Text=="Silt-Label")
             {
-                this.Controls.Add(lbl);
+                Controls.Add(lbl);
             }
             else if (e.Node.Text == "Märkeruut-CheckBox")
             {
                 box_btn = new CheckBox();
                 box_btn.Text = "Näita nupp";
                 box_btn.Location = new Point(230, 10);
-                this.Controls.Add(box_btn);
+                Controls.Add(box_btn);
                 box_lbl = new CheckBox();
                 box_lbl.Text = "Näita silt";
                 box_lbl.Location = new Point(230, 40);
-                this.Controls.Add(box_lbl);
+                Controls.Add(box_lbl);
                 box_btn.CheckedChanged += Box_btn_CheckedChanged;
                 box_lbl.CheckedChanged += Box_lbl_CheckedChanged;
             }
@@ -81,8 +88,8 @@ namespace FormsAppDem
                 r2.Text = "Paremale";
                 r2.Location = new Point(250, 90);
                 r2.CheckedChanged += new EventHandler(RadioButtons_Changed);
-                this.Controls.Add(r1);
-                this.Controls.Add(r2);
+                Controls.Add(r1);
+                Controls.Add(r2);
             }
             else if(e.Node.Text == "Tekstkast-TextBox")
             {
@@ -99,9 +106,75 @@ namespace FormsAppDem
                 txt_box.Multiline = true;
                 txt_box.Text = text;
                 txt_box.Location = new Point(130, 120);
-                txt_box.Height = 200;
+                txt_box.Height = 100;
                 txt_box.Width = 200;
-                this.Controls.Add(txt_box);
+                Controls.Add(txt_box);
+            }
+            else if(e.Node.Text == "Pildikast-PictureBox")
+            {
+                picture = new PictureBox();
+                picture.Image = new Bitmap("smile.png");
+                picture.Location = new Point(130, 240);
+                picture.Size = new Size(100, 100);
+                picture.SizeMode = PictureBoxSizeMode.Zoom;
+                picture.BorderStyle = BorderStyle.Fixed3D;
+                Controls.Add(picture);
+            }
+            else if(e.Node.Text == "Kaart-TabControl")
+            {
+                tabControl = new TabControl();
+                tabControl.Location = new Point(350, 120);
+                tabControl.Size = new Size(200, 100);
+                page1 = new TabPage("Esimene");
+                page1.BackColor = Color.Blue;
+                page2 = new TabPage("Teine");
+                page2.BackColor = Color.Black;
+                page3 = new TabPage("Kolmas");
+                page2.BackColor = Color.Black;
+                tabControl.Controls.Add(page1);
+                tabControl.Controls.Add(page2);
+                tabControl.Controls.Add(page3);
+                Controls.Add(tabControl);
+                var ans = MessageBox.Show("Kas sa tahad 1 lehel?", "Mida sa tahad?", MessageBoxButtons.YesNo);
+                if (ans == DialogResult.Yes)
+                {
+                    tabControl.SelectedIndex = 0;
+                }
+                else
+                {
+                    var ans1 = MessageBox.Show("Kas sa tahad 2 lehel?", "Mida sa tahad?", MessageBoxButtons.YesNo);
+                    if(ans1 == DialogResult.Yes)
+                    {
+                        tabControl.SelectedIndex = 1;
+                    }
+                    else
+                    {
+                        var ans2 = MessageBox.Show("Kas sa tahad 3 lehel?", "Mida sa tahad?", MessageBoxButtons.YesNo);
+                        if(ans2 == DialogResult.Yes)
+                        {
+                            tabControl.SelectedIndex = 2;
+                        }
+                        else
+                        {
+                            Controls.Remove(tabControl);
+                        }
+                    }
+                }
+            }
+            else if(e.Node.Text == "Sõnumkast-MessageBox")
+            {
+                MessageBox.Show("Dadova", "kõige lihtsam aken");
+                var answer =  MessageBox.Show("Tahad InputBoxi näha?", "Aken koos nuppudega", MessageBoxButtons.YesNo);
+                if (answer == DialogResult.Yes)
+                {
+                    string text = Interaction.InputBox("Sisesta siia mingi tekst", "InputBox", "Mingi tekst");
+                    if (MessageBox.Show("kas tahad tekst saada Tekskastisse?", "Teksti salvestamine", MessageBoxButtons.OKCancel) == DialogResult.OK)
+                    {
+                        lbl.Text = text;
+                        lbl.Location = new Point(130, 70);
+                        Controls.Add(lbl);
+                    }
+                }
             }
         }
 
@@ -148,13 +221,13 @@ namespace FormsAppDem
             if (btn.BackColor==Color.Green)
             {
                 btn.BackColor = Color.Orange;
-                lbl.BackColor = Color.Green;
+                btn.ForeColor = Color.Green;
                 lbl.ForeColor = Color.Orange;
             }
             else
             {
                 btn.BackColor = Color.Green;
-                lbl.BackColor = Color.Orange;
+                btn.ForeColor = Color.Orange;
                 lbl.ForeColor = Color.Green;
             }
         }
