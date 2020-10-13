@@ -9,11 +9,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Xml.Schema;
 
 namespace FormsAppDem
 {
     public partial class Form1 : Form
     {
+        Random rnd = new Random();
         TreeView tree;
         Button btn;
         Label lbl;
@@ -23,10 +25,12 @@ namespace FormsAppDem
         PictureBox picture;
         TabControl tabControl;
         TabPage page1, page2, page3;
+        ListBox lbox;
+        DataGridView dgv;
         public Form1()
         {
             Height = 500;
-            Width = 600;
+            Width = 750;
             Text = "Vorm elementidega";
             tree = new TreeView();
             tree.Dock = DockStyle.Left;
@@ -51,6 +55,9 @@ namespace FormsAppDem
             tn.Nodes.Add(new TreeNode("Pildikast-PictureBox"));
             tn.Nodes.Add(new TreeNode("Kaart-TabControl"));
             tn.Nodes.Add(new TreeNode("Sõnumkast-MessageBox"));
+            tn.Nodes.Add(new TreeNode("Nimekirikast-ListBox"));
+            tn.Nodes.Add(new TreeNode("Andmedvõrevaade-DataGridView"));
+            tn.Nodes.Add(new TreeNode("Menüü-Menu"));
             tree.Nodes.Add(tn);
             Controls.Add(tree);
         }
@@ -175,6 +182,96 @@ namespace FormsAppDem
                         Controls.Add(lbl);
                     }
                 }
+            }
+            else if (e.Node.Text == "Nimekirikast-ListBox")
+            {
+                string[] Colors_nimetused = new string[] { "Kollane", "Punane", "Roheline", "Sinine" };
+                lbox = new ListBox();
+                foreach (var item in Colors_nimetused)
+                {
+                    lbox.Items.Add(item);
+                }
+                lbox.Location = new Point(130, 360);
+                lbox.Width = 50;
+                lbox.Height = Colors_nimetused.Length * 15;
+                Controls.Add(lbox);
+            }
+            else if (e.Node.Text == "Andmedvõrevaade-DataGridView")
+            {
+                DataSet dataSet = new DataSet("Näide");
+                dataSet.ReadXml("..//..//Files//example.xml");
+                dgv = new DataGridView();
+                dgv.Location = new Point(250, 240);
+                dgv.Width = 443;
+                dgv.Height = 200;
+                dgv.AutoGenerateColumns = true;
+                dgv.DataMember = "food";
+                dgv.DataSource = dataSet;
+                Controls.Add(dgv);
+            }
+            else if (e.Node.Text == "Menüü-Menu")
+            {
+                MainMenu menu = new MainMenu();
+                MenuItem menuitem1 = new MenuItem("File");
+                menuitem1.MenuItems.Add("Exit", new EventHandler(menuitem1_Exit));
+                menuitem1.MenuItems.Add("Clear", new EventHandler(menuitem1_Clear));
+                MenuItem menuitem2 = new MenuItem("Tree");
+                MenuItem menuitem2_1 = new MenuItem("Color");
+                menuitem2.MenuItems.Add("Hide Tree", new EventHandler(menuitem2_Hide));
+                menuitem2.MenuItems.Add("Show Tree", new EventHandler(menuitem2_Show));
+                menuitem2.MenuItems.Add(menuitem2_1);
+                menuitem2_1.MenuItems.Add("Standart Color", new EventHandler(menuitem2_SdColor));
+                menuitem2_1.MenuItems.Add("Random Color", new EventHandler(menuitem2_RndColor));
+                menu.MenuItems.Add(menuitem1);
+                menu.MenuItems.Add(menuitem2);
+                Menu = menu;
+            }
+        }
+
+        private void menuitem2_RndColor(object sender, EventArgs e)
+        {
+            Color rndColor = Color.FromArgb(rnd.Next(256), rnd.Next(256), rnd.Next(256));
+            tree.BackColor = rndColor;
+        }
+
+        private void menuitem2_SdColor(object sender, EventArgs e)
+        {
+            tree.BackColor = Color.White;
+        }
+
+        private void menuitem1_Clear(object sender, EventArgs e)
+        {
+            if (MessageBox.Show("Kas oled kindel?", "Küsimus", MessageBoxButtons.YesNo) == DialogResult.Yes)
+            {
+                Controls.Remove(btn);
+                Controls.Remove(lbl);
+                Controls.Remove(box_btn);
+                Controls.Remove(box_lbl);
+                Controls.Remove(r1);
+                Controls.Remove(r2);
+                Controls.Remove(txt_box);
+                Controls.Remove(picture);
+                Controls.Remove(tabControl);
+                Controls.Remove(lbox);
+                Controls.Remove(dgv);
+            }
+        }
+
+        private void menuitem2_Show(object sender, EventArgs e)
+        {
+            Controls.Add(tree);
+        }
+
+        private void menuitem2_Hide(object sender, EventArgs e)
+        {
+            Controls.Remove(tree);
+        }
+
+        private void menuitem1_Exit(object sender, EventArgs e)
+        {
+            if (MessageBox.Show("Kas oled kindel?", "Küsimus", MessageBoxButtons.YesNo) == DialogResult.Yes)
+            {
+                Dispose();
             }
         }
 
