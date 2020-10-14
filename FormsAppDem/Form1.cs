@@ -33,6 +33,7 @@ namespace FormsAppDem
             Width = 750;
             Text = "Vorm elementidega";
             tree = new TreeView();
+            tree.BackColor = Color.Snow;
             tree.Dock = DockStyle.Left;
             tree.AfterSelect += Tree_AfterSelect;
             TreeNode tn = new TreeNode("Elemendid");
@@ -217,15 +218,47 @@ namespace FormsAppDem
                 menuitem1.MenuItems.Add("Clear", new EventHandler(menuitem1_Clear));
                 MenuItem menuitem2 = new MenuItem("Tree");
                 MenuItem menuitem2_1 = new MenuItem("Color");
+                MenuItem menuitem2_2 = new MenuItem("Set Color");
                 menuitem2.MenuItems.Add("Hide Tree", new EventHandler(menuitem2_Hide));
                 menuitem2.MenuItems.Add("Show Tree", new EventHandler(menuitem2_Show));
                 menuitem2.MenuItems.Add(menuitem2_1);
-                menuitem2_1.MenuItems.Add("Standart Color", new EventHandler(menuitem2_SdColor));
                 menuitem2_1.MenuItems.Add("Random Color", new EventHandler(menuitem2_RndColor));
+                menuitem2_1.MenuItems.Add(menuitem2_2);
+                menuitem2_2.MenuItems.Add("Standart Color", new EventHandler(menuitem2_SdColor));
+                menuitem2_2.MenuItems.Add("Red", new EventHandler(menuitem2_RColor));
+                menuitem2_2.MenuItems.Add("Green", new EventHandler(menuitem2_GColor));
+                menuitem2_2.MenuItems.Add("Blue", new EventHandler(menuitem2_BColor));
+                menuitem2_2.MenuItems.Add("White", new EventHandler(menuitem2_WColor));
+                menuitem2_2.MenuItems.Add("Black", new EventHandler(menuitem2_BLColor));
                 menu.MenuItems.Add(menuitem1);
                 menu.MenuItems.Add(menuitem2);
                 Menu = menu;
             }
+        }
+
+        private void menuitem2_BLColor(object sender, EventArgs e)
+        {
+            tree.BackColor = Color.Black;
+        }
+
+        private void menuitem2_WColor(object sender, EventArgs e)
+        {
+            tree.BackColor = Color.White;
+        }
+
+        private void menuitem2_BColor(object sender, EventArgs e)
+        {
+            tree.BackColor = Color.Blue;
+        }
+
+        private void menuitem2_GColor(object sender, EventArgs e)
+        {
+            tree.BackColor = Color.Green;
+        }
+
+        private void menuitem2_RColor(object sender, EventArgs e)
+        {
+            tree.BackColor = Color.Red;
         }
 
         private void menuitem2_RndColor(object sender, EventArgs e)
@@ -236,7 +269,7 @@ namespace FormsAppDem
 
         private void menuitem2_SdColor(object sender, EventArgs e)
         {
-            tree.BackColor = Color.White;
+            tree.BackColor = Color.Snow;
         }
 
         private void menuitem1_Clear(object sender, EventArgs e)
